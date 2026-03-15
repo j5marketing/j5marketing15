@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>J5 Marketing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f5f3ee;
+      --red: #e8220a;
+      --dim: #3a3a3a;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: grid;
+      grid-template-rows: 1fr auto auto;
+      min-height: 100vh;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 50%, #1a0a0a 0%, var(--black) 100%);
+      z-index: 0;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .date-line {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease 0.2s forwards;
+    }
+
+    .hero-signal {
+      font-size: clamp(4rem, 18vw, 14rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: blastIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+      user-select: none;
+    }
+
+    .hero-sub {
+      margin-top: 2.5rem;
+      font-size: clamp(0.7rem, 1.8vw, 1rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp 0.6s ease 1s forwards;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .links-section {
+      padding: 3rem 2rem 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      border-top: 1px solid #1e1e1e;
+    }
+
+    .links-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 1.3s forwards;
+    }
+
+    .asset-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      letter-spacing: 0.08em;
+      color: var(--white);
+      text-decoration: none;
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 0.15em;
+      transition: color 0.2s, border-color 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 1.5s forwards;
+    }
+
+    .asset-link:hover {
+      color: var(--red);
+      border-color: var(--white);
+    }
+
+    .asset-link .arrow {
+      font-size: 0.8em;
+      transition: transform 0.2s;
+    }
+
+    .asset-link:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .links-note {
+      margin-top: 1.2rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+      max-width: 360px;
+      text-align: center;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 1.7s forwards;
+    }
+
+    .links-note strong {
+      color: #666;
+    }
+
+    footer {
+      border-top: 1px solid #1a1a1a;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #333;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 2s forwards;
+    }
+
+    footer a {
+      color: #444;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    footer a:hover {
+      color: var(--white);
+    }
+
+    @keyframes blastIn {
+      from { opacity: 0; transform: scale(0.85) translateY(20px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--red);
+      animation: scanLine 3s ease-out 0.1s forwards;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    @keyframes scanLine {
+      from { top: 0; opacity: 1; }
+      to   { top: 100%; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="date-line">March 15, 2026 — Startup Sunday</p>
+      <div class="hero-signal">15🚀📆</div>
+      <p class="hero-sub">J5 Marketing is live.<br>No announcement. No countdown.<br>Just the date, the rocket, and the work.</p>
+    </div>
+  </section>
+
+  <section class="links-section">
+    <p class="links-label">Looking for something?</p>
+    <a class="asset-link" href="https://conveyormg.com" target="_blank" rel="noopener">
+      conveyormg.com <span class="arrow">→</span>
+    </a>
+    <p class="links-note">
+      The agency you worked with is at Conveyor.<br>
+      <strong>What was here this morning is gone.</strong><br>
+      What's here now is different.
+    </p>
+  </section>
+
+  <footer>
+    <span>© 2026 J5 Marketing, LLC. All rights reserved.</span>
+  </footer>
+
+</body>
+</html>
