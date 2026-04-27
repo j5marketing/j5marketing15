@@ -1,231 +1,604 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>J5 Marketing</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>J5 Marketing | Strategic AI implementation</title>
+  <meta name="description" content="Founder-led strategic AI implementation for the small businesses that make West Chester, PA run. The first partner agency certified to deploy Packaged." />
+
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <script src="https://js.hsforms.net/forms/embed/40444.js" defer></script>
+
   <style>
+    /* ==========================================================================
+       J5 Marketing | design tokens (pulled from J5 Marketing Design System)
+       ========================================================================== */
+    :root {
+      --orange:        #E8420A;
+      --orange-deep:   #C9370A;
+      --charcoal:      #4A4A4A;
+      --charcoal-ink:  #2A2A2A;
+      --navy:          #0D1B2E;
+      --navy-deep:     #060E18;
+      --navy-raised:   #18283F;
+      --cyan:          #3EC8DC;
+      --cyan-light:    #A8E4EE;
+      --white:         #FFFFFF;
+      --bone:          #F6F4EF;
+      --line:          #E4E2DC;
+      --line-dark:     #20324A;
+
+      --fg1: var(--charcoal-ink);
+      --fg2: var(--charcoal);
+      --fg3: #7A7A7A;
+
+      --font-sans: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "Space Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+      --tracking-tight:   -0.02em;
+      --tracking-eyebrow: 0.22em;
+
+      --maxw: 1180px;
+      --pad-x: 40px;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --black: #0a0a0a;
-      --white: #f5f3ee;
-      --red: #e8220a;
-      --dim: #3a3a3a;
-    }
-
     html, body {
-      height: 100%;
-      background: var(--black);
+      background: var(--white);
+      color: var(--fg1);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+
+    body { overflow-x: hidden; }
+
+    img { display: block; max-width: 100%; height: auto; }
+
+    a {
+      color: var(--orange);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 140ms ease, border-color 140ms ease;
+    }
+    a:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+    ::selection { background: var(--orange); color: var(--white); }
+
+    /* ---------- Header ---------- */
+    .j5-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      padding: 18px var(--pad-x);
+      background: var(--navy);
+      border-bottom: 1px solid var(--line-dark);
+    }
+    .j5-header__brand {
+      display: inline-flex;
+      align-items: center;
+      border-bottom: none;
+    }
+    .j5-header__brand img {
+      height: 30px;
+      width: auto;
+    }
+
+    /* ---------- Hero (full viewport, navy) ---------- */
+    .j5-hero {
+      position: relative;
+      background: var(--navy);
       color: var(--white);
-      font-family: 'Space Mono', monospace;
-      overflow-x: hidden;
-    }
-
-    body {
-      display: grid;
-      grid-template-rows: 1fr auto auto;
-      min-height: 100vh;
-    }
-
-    .hero {
+      min-height: calc(100vh - 67px); /* viewport minus sticky header */
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 4rem 2rem;
-      position: relative;
+      padding: clamp(64px, 9vh, 120px) var(--pad-x) 56px;
       overflow: hidden;
     }
-
-    .hero::before {
+    .j5-hero::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 50%, #1a0a0a 0%, var(--black) 100%);
-      z-index: 0;
+      background: radial-gradient(ellipse 80% 70% at 25% 50%, var(--navy-raised) 0%, var(--navy) 70%);
+      pointer-events: none;
     }
-
-    .hero-inner {
+    .j5-hero__scan {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--orange);
+      animation: scanline 2.4s ease-out 0.3s forwards;
+      pointer-events: none;
+      z-index: 2;
+    }
+    @keyframes scanline {
+      from { top: 0; opacity: 1; }
+      to   { top: 100%; opacity: 0; }
+    }
+    .j5-hero__inner {
       position: relative;
       z-index: 1;
+      max-width: var(--maxw);
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+      grid-template-areas: "text photo";
+      column-gap: clamp(32px, 5vw, 72px);
+      row-gap: clamp(28px, 4vw, 48px);
+      align-items: center;
     }
-
-    .date-line {
-      font-family: 'Space Mono', monospace;
-      font-size: clamp(0.65rem, 1.5vw, 0.85rem);
-      letter-spacing: 0.35em;
+    .j5-hero__text { grid-area: text; min-width: 0; }
+    .j5-hero__photo {
+      grid-area: photo;
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      max-height: 64vh;
+      border-top: 4px solid var(--orange);
+      overflow: hidden;
+      background: var(--navy-deep);
+      opacity: 0;
+      animation: fadeUp 900ms cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards;
+    }
+    .j5-hero__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 22%;
+      filter: url(#j5-duotone) contrast(1.04);
+    }
+    .j5-hero__photo::after {
+      /* Hairline frame inside the orange top-rule for crispness */
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px solid var(--line-dark);
+      border-top: none;
+      pointer-events: none;
+    }
+    .j5-hero__eyebrow {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
       text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 2rem;
+      color: var(--orange);
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.2s forwards;
+      animation: fadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     }
-
-    .hero-signal {
-      font-size: clamp(4rem, 18vw, 14rem);
-      line-height: 1;
-      letter-spacing: -0.02em;
+    .j5-hero__name {
+      margin-top: 28px;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(48px, 7.5vw, 104px);
+      line-height: 0.95;
+      letter-spacing: var(--tracking-tight);
+      color: var(--bone);
       opacity: 0;
-      animation: blastIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
-      user-select: none;
+      animation: fadeUp 800ms cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
     }
-
-    .hero-sub {
-      margin-top: 2.5rem;
-      font-size: clamp(0.7rem, 1.8vw, 1rem);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--white);
+    .j5-hero__lede {
+      margin-top: clamp(24px, 3.5vh, 40px);
+      max-width: 620px;
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: clamp(20px, 2.1vw, 28px);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--bone);
       opacity: 0;
-      animation: fadeUp 0.6s ease 1s forwards;
-      max-width: 480px;
-      line-height: 1.7;
+      animation: fadeUp 700ms cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
     }
+    .j5-hero__lede .accent { color: var(--orange); }
 
-    .links-section {
-      padding: 3rem 2rem 3.5rem;
+    .j5-hero__meta {
+      position: relative;
+      z-index: 1;
+      max-width: var(--maxw);
+      width: 100%;
+      margin: 64px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--line-dark);
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-      border-top: 1px solid #1e1e1e;
-    }
-
-    .links-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 1.5rem;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 1.3s forwards;
-    }
-
-    .asset-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
-      letter-spacing: 0.08em;
-      color: var(--white);
-      text-decoration: none;
-      border-bottom: 2px solid var(--red);
-      padding-bottom: 0.15em;
-      transition: color 0.2s, border-color 0.2s;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 1.5s forwards;
-    }
-
-    .asset-link:hover {
-      color: var(--red);
-      border-color: var(--white);
-    }
-
-    .asset-link .arrow {
-      font-size: 0.8em;
-      transition: transform 0.2s;
-    }
-
-    .asset-link:hover .arrow {
-      transform: translateX(4px);
-    }
-
-    .links-note {
-      margin-top: 1.2rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.08em;
-      color: var(--dim);
-      max-width: 360px;
-      text-align: center;
-      line-height: 1.8;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 1.7s forwards;
-    }
-
-    .links-note strong {
-      color: #666;
-    }
-
-    footer {
-      border-top: 1px solid #1a1a1a;
-      padding: 1.25rem 2rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.6rem;
+      justify-content: space-between;
+      gap: 16px;
+      font-family: var(--font-mono);
+      font-size: 11px;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: #333;
+      color: var(--bone);
       opacity: 0;
-      animation: fadeUp 0.5s ease 2s forwards;
+      animation: fadeUp 600ms ease 1.1s forwards;
+    }
+    .j5-hero__meta span { opacity: 0.55; }
+    .j5-hero__cue {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--orange);
+      opacity: 0.95 !important;
+    }
+    .j5-hero__cue::after {
+      content: '↓';
+      font-family: var(--font-sans);
+      font-size: 13px;
+      animation: bob 2.4s ease-in-out 1.5s infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(3px); }
     }
 
-    footer a {
-      color: #444;
-      text-decoration: none;
-      transition: color 0.2s;
+    /* ---------- Section primitives ---------- */
+    .j5-section {
+      padding: clamp(80px, 12vh, 128px) var(--pad-x);
+      border-bottom: 1px solid var(--line);
+    }
+    .j5-section--light  { background: var(--bone); color: var(--fg1); }
+    .j5-section--dark   { background: var(--navy); color: var(--bone); border-bottom-color: var(--line-dark); }
+
+    .j5-section__inner {
+      max-width: 920px;
+      margin: 0 auto;
     }
 
-    footer a:hover {
+    .j5-section__eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 28px;
+    }
+
+    .j5-prose {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: clamp(24px, 2.8vw, 38px);
+      line-height: 1.3;
+      letter-spacing: var(--tracking-tight);
+      color: var(--charcoal-ink);
+      text-wrap: pretty;
+    }
+    .j5-prose + .j5-prose { margin-top: 1.4em; }
+    .j5-section--dark .j5-prose { color: var(--bone); }
+    .j5-prose strong {
+      font-weight: 700;
+      color: var(--charcoal-ink);
+    }
+    .j5-section--dark .j5-prose strong { color: var(--white); }
+    .j5-prose .accent { color: var(--orange); font-weight: 600; }
+
+    /* ---------- CTA section + HubSpot form ---------- */
+    .j5-cta {
+      padding: clamp(96px, 14vh, 144px) var(--pad-x);
+      background: var(--white);
+    }
+    .j5-cta__inner {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .j5-cta__eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 24px;
+    }
+    .j5-cta__h {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 0.98;
+      letter-spacing: var(--tracking-tight);
+      color: var(--charcoal-ink);
+      margin-bottom: 32px;
+    }
+    .j5-cta__sub {
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--fg2);
+      max-width: 540px;
+      margin-bottom: 56px;
+    }
+    .j5-cta__address {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--fg3);
+      line-height: 1.9;
+      margin-bottom: 14px;
+      font-style: normal;
+    }
+    .j5-cta__linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--orange);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color 140ms ease, border-color 140ms ease;
+    }
+    .j5-cta__linkedin:hover {
+      color: var(--orange-deep);
+      border-bottom-color: var(--orange);
+    }
+    .j5-cta__linkedin .arrow {
+      display: inline-block;
+      transition: transform 140ms ease;
+    }
+    .j5-cta__linkedin:hover .arrow { transform: translateX(4px); }
+    .j5-cta__form {
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* HubSpot form styling | scoped to .j5-cta__form */
+    .j5-cta__form .hs-form-frame { display: block; }
+    .j5-cta__form form { display: grid; gap: 18px; }
+    .j5-cta__form .hs-form-field { display: flex; flex-direction: column; }
+    .j5-cta__form label,
+    .j5-cta__form .hs-form-field > label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: var(--tracking-eyebrow);
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .j5-cta__form input[type="text"],
+    .j5-cta__form input[type="email"],
+    .j5-cta__form input[type="tel"],
+    .j5-cta__form textarea,
+    .j5-cta__form select {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      color: var(--charcoal-ink);
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 14px 16px;
+      width: 100%;
+      transition: border-color 140ms ease, box-shadow 140ms ease;
+    }
+    .j5-cta__form input:focus,
+    .j5-cta__form textarea:focus,
+    .j5-cta__form select:focus {
+      outline: none;
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(232, 66, 10, 0.15);
+    }
+    .j5-cta__form .hs-error-msgs,
+    .j5-cta__form .hs-error-msg {
+      list-style: none;
+      font-size: 13px;
+      color: var(--orange-deep);
+      margin-top: 8px;
+    }
+    .j5-cta__form input[type="submit"],
+    .j5-cta__form .hs-button {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      background: var(--orange);
       color: var(--white);
+      border: 1px solid var(--orange);
+      border-radius: 0;
+      padding: 16px 26px;
+      cursor: pointer;
+      width: auto;
+      justify-self: start;
+      transition: background-color 140ms ease, border-color 140ms ease;
+    }
+    .j5-cta__form input[type="submit"]:hover,
+    .j5-cta__form .hs-button:hover {
+      background: var(--orange-deep);
+      border-color: var(--orange-deep);
+    }
+    .j5-cta__form .submitted-message {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      line-height: 1.5;
+      color: var(--charcoal-ink);
+      padding: 20px 0;
     }
 
-    @keyframes blastIn {
-      from { opacity: 0; transform: scale(0.85) translateY(20px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
+    /* ---------- Footer ---------- */
+    .j5-footer {
+      background: var(--navy);
+      color: var(--bone);
+      padding: 56px var(--pad-x) 40px;
+    }
+    .j5-footer__inner {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .j5-footer__mark {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+    .j5-footer__text {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bone);
+      opacity: 0.6;
+      text-align: right;
+      line-height: 1.7;
+    }
+    .j5-footer__text strong {
+      color: var(--orange);
+      font-weight: 700;
+      opacity: 1;
     }
 
+    /* ---------- Animations ---------- */
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(14px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--red);
-      animation: scanLine 3s ease-out 0.1s forwards;
-      z-index: 999;
-      pointer-events: none;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .j5-hero__scan { display: none; }
     }
 
-    @keyframes scanLine {
-      from { top: 0; opacity: 1; }
-      to   { top: 100%; opacity: 0; }
+    /* ---------- Responsive ---------- */
+    @media (max-width: 880px) {
+      .j5-hero__inner {
+        grid-template-columns: 1fr;
+        grid-template-areas: "photo" "text";
+      }
+      .j5-hero__photo {
+        aspect-ratio: 3 / 4;
+        max-height: 48vh;
+        max-width: 360px;
+        margin: 0 auto;
+      }
+    }
+    @media (max-width: 720px) {
+      :root { --pad-x: 24px; }
+      .j5-header { padding: 14px var(--pad-x); }
+      .j5-header__brand img { height: 26px; }
+      .j5-hero { min-height: calc(100vh - 55px); }
+      .j5-hero__meta { flex-direction: column; gap: 8px; }
+      .j5-footer__inner { flex-direction: column; align-items: flex-start; }
+      .j5-footer__text { text-align: left; }
     }
   </style>
 </head>
 <body>
 
-  <section class="hero">
-    <div class="hero-inner">
-      <p class="date-line">March 15, 2026 — Startup Sunday</p>
-      <div class="hero-signal">15🚀📆</div>
-      <p class="hero-sub">J5 Marketing is live.<br>No announcement. No countdown.<br>Just the date, the rocket, and the work.</p>
+  <!-- Brand duotone filter: maps grayscale shadows -> navy, highlights -> bone.
+       Loaded once globally; referenced via filter: url(#j5-duotone). -->
+  <svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;">
+    <filter id="j5-duotone" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix"
+        values="0.33 0.33 0.33 0 0
+                0.33 0.33 0.33 0 0
+                0.33 0.33 0.33 0 0
+                0    0    0    1 0"/>
+      <feComponentTransfer>
+        <feFuncR tableValues="0.0510 0.9647"/>
+        <feFuncG tableValues="0.1059 0.9569"/>
+        <feFuncB tableValues="0.1804 0.9373"/>
+      </feComponentTransfer>
+    </filter>
+  </svg>
+
+  <header class="j5-header">
+    <a href="#top" class="j5-header__brand" aria-label="J5 Marketing home">
+      <img src="assets/logo-horizontal-onDark.png" alt="J5 Marketing" />
+    </a>
+  </header>
+
+  <section class="j5-hero" id="top">
+    <span class="j5-hero__scan" aria-hidden="true"></span>
+    <div class="j5-hero__inner">
+      <div class="j5-hero__text">
+        <p class="j5-hero__eyebrow">Founder-led &middot; West Chester, PA</p>
+        <h1 class="j5-hero__name">Jason Johnston.</h1>
+        <p class="j5-hero__lede">
+          Strategic AI implementation, built for the businesses
+          that make <span class="accent">West Chester, PA</span> run.
+        </p>
+      </div>
+      <figure class="j5-hero__photo">
+        <img src="assets/jason.jpg" alt="Jason Johnston" />
+      </figure>
+    </div>
+    <div class="j5-hero__meta">
+      <span>01 / Positioning</span>
+      <a href="#talk" class="j5-hero__cue">Let's talk</a>
     </div>
   </section>
 
-  <section class="links-section">
-    <p class="links-label">Looking for something?</p>
-    <a class="asset-link" href="https://conveyormg.com" target="_blank" rel="noopener">
-      conveyormg.com <span class="arrow">→</span>
-    </a>
-    <p class="links-note">
-      The agency you worked with is at Conveyor.<br>
-      <strong>What was here this morning is gone.</strong><br>
-      What's here now is different.
-    </p>
+  <section class="j5-section j5-section--light">
+    <div class="j5-section__inner">
+      <p class="j5-section__eyebrow">02 / What J5 does</p>
+      <p class="j5-prose">
+        Most consultants sell you a system. <strong>J5 builds one that works, then hands you the keys.</strong>
+      </p>
+      <p class="j5-prose">
+        AI-native strategy. Real implementation. No fluff. The first partner agency certified to deploy <span class="accent">Packaged</span>, the agentic operating system built for small business.
+      </p>
+    </div>
   </section>
 
-  <footer>
-    <span>© 2026 J5 Marketing, LLC. All rights reserved.</span>
+  <section class="j5-section j5-section--dark">
+    <div class="j5-section__inner">
+      <p class="j5-section__eyebrow">03 / Who it's for</p>
+      <p class="j5-prose">
+        You started this business to do the work you love. <strong>Not to drown in the work the business creates.</strong>
+      </p>
+      <p class="j5-prose">
+        If you're a West Chester, PA small business owner who's ready to scale without losing what makes you worth scaling, this is where you start.
+      </p>
+    </div>
+  </section>
+
+  <section class="j5-cta" id="talk">
+    <div class="j5-cta__inner">
+      <p class="j5-cta__eyebrow">04 / Contact</p>
+      <h2 class="j5-cta__h">Let's talk.</h2>
+      <address class="j5-cta__address">
+        1548 McDaniel Dr<br/>
+        West Chester, PA 19380
+      </address>
+      <a class="j5-cta__linkedin" href="https://www.linkedin.com/in/jasonajohnston/" target="_blank" rel="noopener noreferrer">
+        LinkedIn <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+      <div class="j5-cta__form">
+        <div class="hs-form-frame" data-region="na1" data-form-id="dbf1b2d4-89aa-4b9f-8cfc-a3b2540a6a72" data-portal-id="40444"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="j5-footer">
+    <div class="j5-footer__inner">
+      <img src="assets/logo-icon-onDark.png" alt="J5" class="j5-footer__mark" />
+      <p class="j5-footer__text">
+        &copy; 2026 J5 Marketing, LLC. All rights reserved.<br/>
+        A <strong>Packaged</strong> Partner Agency.
+      </p>
+    </div>
   </footer>
 
 </body>
